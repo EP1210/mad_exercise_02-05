@@ -47,8 +47,7 @@ class MainActivity : ComponentActivity() {
             MovieAppMAD24Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     MovieList()
                 }
@@ -69,6 +68,7 @@ fun MovieRow(
         modifier = Modifier
             .padding(all = 10.dp)
     ) {
+
         Card(
             shape = RoundedCornerShape(size = 20.dp)
         ) {
@@ -99,17 +99,14 @@ fun MovieRow(
                     text = movie.title,
                     fontSize = 18.sp
                 )
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
+                Icon(imageVector = Icons.Default.KeyboardArrowUp,
                     contentDescription = null,
                     modifier = Modifier
                         .clickable(
                             onClick = {
-                                rotationAngle = (rotationAngle + 180) % 360f
-                            }
-                        )
-                        .rotate(rotationAngle)
-                )
+                            rotationAngle = (rotationAngle + 180) % 360f
+                        })
+                        .rotate(degrees = rotationAngle))
             }
         }
     }
@@ -121,7 +118,7 @@ fun MovieList(
 ) {
     LazyColumn {
         items(items = movies) { movie ->
-            MovieRow(movie)
+            MovieRow(movie = movie)
         }
     }
 }
