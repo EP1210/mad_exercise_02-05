@@ -64,14 +64,13 @@ fun MovieRow(
         mutableFloatStateOf(value = 0f)
     }
 
-    Column(
+    Card(
+        shape = RoundedCornerShape(size = 20.dp),
         modifier = Modifier
             .padding(all = 10.dp)
     ) {
 
-        Card(
-            shape = RoundedCornerShape(size = 20.dp)
-        ) {
+        Column {
             Box {
                 Image(
                     painter = painterResource(id = R.drawable.movie_image),
@@ -99,14 +98,16 @@ fun MovieRow(
                     text = movie.title,
                     fontSize = 18.sp
                 )
-                Icon(imageVector = Icons.Default.KeyboardArrowUp,
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
                     contentDescription = null,
                     modifier = Modifier
                         .clickable(
                             onClick = {
-                            rotationAngle = (rotationAngle + 180) % 360f
-                        })
-                        .rotate(degrees = rotationAngle))
+                                rotationAngle = (rotationAngle + 180) % 360f
+                            })
+                        .rotate(degrees = rotationAngle)
+                )
             }
         }
     }
