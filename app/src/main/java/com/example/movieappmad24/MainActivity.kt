@@ -18,10 +18,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.movieappmad24.models.Movie
@@ -121,5 +127,43 @@ fun MovieList(
         items(items = movies) { movie ->
             MovieRow(movie = movie)
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TopBottomBars() {
+    Scaffold(
+        bottomBar = {
+            BottomAppBar(
+                actions = {
+                    IconButton(
+                        onClick = {
+                            // TODO
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = null
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            // TODO
+                        }) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
+        }
+    ) {
+        Text(
+            text = "",
+            modifier = Modifier
+                .padding(it)
+        )
     }
 }
