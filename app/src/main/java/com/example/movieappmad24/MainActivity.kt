@@ -21,25 +21,29 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.movieappmad24.models.Movie
@@ -56,16 +60,21 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     MovieList()
+                    BottomBar()
                 }
             }
         }
     }
 }
 
+data class BottomNavigationItem(
+    val label: String,
+    val selected: ImageVector,
+    val unselected: ImageVector,
+)
+
 @Composable
-fun MovieRow(
-    movie: Movie
-) {
+fun MovieRow(movie: Movie) {
     var rotationAngle by remember {
         mutableFloatStateOf(value = 0f)
     }
@@ -120,9 +129,7 @@ fun MovieRow(
 }
 
 @Composable
-fun MovieList(
-    movies: List<Movie> = getMovies()
-) {
+fun MovieList(movies: List<Movie> = getMovies()) {
     LazyColumn {
         items(items = movies) { movie ->
             MovieRow(movie = movie)
@@ -130,40 +137,51 @@ fun MovieList(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun TopBottomBars() {
+fun BottomBar() {
+    val navigationItems = listOf(
+        BottomNavigationItem(
+            label = "Home",
+            selected = Icons.Filled.Home,
+            unselected = Icons.Outlined.Home
+        ),
+        BottomNavigationItem(
+            label = "Watchlist",
+            selected = Icons.Filled.Star,
+            unselected = Icons.Outlined.Star
+        )
+    )
+    var itemIndex by rememberSaveable {
+        mutableStateOf(value = 0)
+    }
+
     Scaffold(
         bottomBar = {
-            BottomAppBar(
-                actions = {
-                    IconButton(
+            NavigationBar {
+                navigationItems.forEachIndexed { clickedIndex, navigationItem ->
+                    NavigationBarItem(
+                        selected = itemIndex == clickedIndex, // a specific item is selected if its index matches the clicked index
                         onClick = {
-                            // TODO
-                        }) {
-                        Icon(
-                            imageVector = Icons.Default.Home,
-                            contentDescription = null
-                        )
-                    }
-
-                    IconButton(
-                        onClick = {
-                            // TODO
-                        }) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null
-                        )
-                    }
+                                  itemIndex = clickedIndex
+                                  /*TODO: Navigation logic*/
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = when {
+                                    itemIndex == clickedIndex -> navigationItem.selected
+                                    else -> navigationItem.unselected
+                                },
+                                contentDescription = null
+                            )
+                        },
+                        label = {
+                            Text(text = navigationItem.label)
+                        }
+                    )
                 }
-            )
+            }
         }
     ) {
-        Text(
-            text = "",
-            modifier = Modifier
-                .padding(it)
-        )
+        it
     }
 }
