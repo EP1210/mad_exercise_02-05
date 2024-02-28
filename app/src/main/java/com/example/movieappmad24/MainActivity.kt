@@ -3,9 +3,9 @@ package com.example.movieappmad24
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,8 +25,10 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -36,8 +38,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -80,14 +82,23 @@ data class BottomNavigationItem(
 fun MovieRow(
     movie: Movie
 ) {
-    var rotationAngle by remember {
-        mutableFloatStateOf(value = 0f)
+    var cardExpansion by remember {
+        mutableStateOf(value = false)
     }
+    val arrowRotation by animateFloatAsState(
+        targetValue = when (cardExpansion) {
+            true -> 180f
+            else -> 0f
+        },
+        label = "arrow"
+    )
 
     Card(
         shape = RoundedCornerShape(size = 20.dp),
         modifier = Modifier
             .padding(all = 10.dp)
+            .fillMaxWidth()
+            .animateContentSize()
     ) {
 
         Column {
@@ -109,24 +120,48 @@ fun MovieRow(
             }
 
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp)
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = movie.title,
-                    fontSize = 18.sp
-                )
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
-                    contentDescription = null,
+                    fontSize = 18.sp,
                     modifier = Modifier
-                        .clickable(
-                            onClick = {
-                                rotationAngle = (rotationAngle + 180) % 360f
-                            })
-                        .rotate(degrees = rotationAngle)
+                        .padding(start = 7.dp)
+                        .weight(weight = 7f) // text takes seven parts of row
+                )
+                IconButton(
+                    onClick = {
+                        cardExpansion = !cardExpansion
+                    },
+                    modifier = Modifier
+                        .weight(weight = 1f) // icon button takes one part of row
+                        .rotate(degrees = arrowRotation)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = null
+                    )
+                }
+            }
+            if (cardExpansion) {
+                Text(
+                    text = """Director: ${movie.director}
+                        |Released: ${movie.year}
+                        |Genre: ${movie.genre}
+                        |Actors: ${movie.actors}
+                        |Rating: ${movie.rating}
+                    """.trimMargin(),
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                )
+                Divider(
+                    modifier = Modifier
+                        .padding(all = 5.dp)
+                )
+                Text(
+                    text = "Plot: ${movie.plot}",
+                    modifier = Modifier
+                        .padding(start = 12.dp, bottom = 12.dp)
                 )
             }
         }
@@ -183,7 +218,7 @@ fun Home() {
                         selected = bottomItemIndex == clickedIndex, // a specific item is selected if its index matches the clicked index
                         onClick = {
                             bottomItemIndex = clickedIndex
-                            /*TODO: Navigation logic*/
+                            // TODO: Navigation logic
                         },
                         icon = {
                             Icon(
@@ -195,7 +230,9 @@ fun Home() {
                             )
                         },
                         label = {
-                            Text(text = navigationItem.label)
+                            Text(
+                                text = navigationItem.label
+                            )
                         }
                     )
                 }
