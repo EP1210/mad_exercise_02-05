@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -49,9 +48,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.ui.theme.MovieAppMAD24Theme
@@ -89,8 +88,7 @@ fun MovieRow(
         targetValue = when (cardExpansion) {
             true -> 180f
             else -> 0f
-        },
-        label = "arrow"
+        }
     )
 
     Card(
@@ -103,12 +101,12 @@ fun MovieRow(
 
         Column {
             Box {
-                Image(
-                    painter = painterResource(id = R.drawable.movie_image),
+                AsyncImage(
+                    model = movie.images[0],
                     contentDescription = null,
                     contentScale = FillWidth,
                     modifier = Modifier
-                        .aspectRatio(ratio = 21f / 8.5f)
+                        .aspectRatio(ratio = 18.5f / 9f)
                 )
                 Icon(
                     imageVector = Icons.Default.FavoriteBorder,
