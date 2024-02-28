@@ -17,11 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -45,15 +41,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
+import com.example.movieappmad24.models.getBottomNavigationItems
 import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.ui.theme.MovieAppMAD24Theme
+import com.example.movieappmad24.ui.theme.Purple80
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,12 +66,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-data class BottomNavigationItem(
-    val label: String,
-    val selected: ImageVector,
-    val unselected: ImageVector,
-)
 
 @Composable
 fun MovieRow(
@@ -108,13 +98,18 @@ fun MovieRow(
                     modifier = Modifier
                         .aspectRatio(ratio = 18.5f / 9f)
                 )
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = null,
+                IconButton(
+                    onClick = {
+                        // TODO: Add to favourites logic
+                    },
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
-                        .padding(all = 20.dp)
-                )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = null
+                    )
+                }
             }
 
             Row(
@@ -142,25 +137,7 @@ fun MovieRow(
                 }
             }
             if (cardExpansion) {
-                Text(
-                    text = """Director: ${movie.director}
-                        |Released: ${movie.year}
-                        |Genre: ${movie.genre}
-                        |Actors: ${movie.actors}
-                        |Rating: ${movie.rating}
-                    """.trimMargin(),
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                )
-                Divider(
-                    modifier = Modifier
-                        .padding(all = 5.dp)
-                )
-                Text(
-                    text = "Plot: ${movie.plot}",
-                    modifier = Modifier
-                        .padding(start = 12.dp, bottom = 12.dp)
-                )
+                DisplayMovieDetails(specificMovie = movie)
             }
         }
     }
@@ -177,21 +154,35 @@ fun MovieList(
     }
 }
 
+@Composable
+fun DisplayMovieDetails(
+    specificMovie: Movie
+) {
+    Text(
+        text = """Director: ${specificMovie.director}
+                        |Released: ${specificMovie.year}
+                        |Genre: ${specificMovie.genre}
+                        |Actors: ${specificMovie.actors}
+                        |Rating: ${specificMovie.rating}
+                    """.trimMargin(),
+        modifier = Modifier
+            .padding(start = 12.dp, top = 10.dp)
+    )
+    Divider(
+        modifier = Modifier
+            .padding(all = 5.dp)
+    )
+    Text(
+        text = "Plot: ${specificMovie.plot}",
+        modifier = Modifier
+            .padding(start = 12.dp, bottom = 12.dp)
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home() {
-    val navigationItems = listOf(
-        BottomNavigationItem(
-            label = "Home",
-            selected = Icons.Filled.Home,
-            unselected = Icons.Outlined.Home
-        ),
-        BottomNavigationItem(
-            label = "Watchlist",
-            selected = Icons.Filled.Star,
-            unselected = Icons.Outlined.Star
-        )
-    )
+    val navigationItems = getBottomNavigationItems()
     var bottomItemIndex by rememberSaveable {
         mutableIntStateOf(value = 0)
     }
@@ -205,7 +196,7 @@ fun Home() {
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.LightGray
+                    containerColor = Purple80
                 )
             )
         },
