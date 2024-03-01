@@ -7,6 +7,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,7 +61,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    Home()
+                    ShowScreen(displayedMovies = getMovies())
                 }
             }
         }
@@ -77,7 +78,7 @@ fun MovieRow(
     val arrowRotation by animateFloatAsState(
         targetValue = when (cardExpansion) {
             true -> 180f
-            else -> 0f
+            false -> 0f
         }
     )
 
@@ -137,52 +138,58 @@ fun MovieRow(
                 }
             }
             if (cardExpansion) {
-                DisplayMovieDetails(specificMovie = movie)
+                DisplayMovieDetails(movie = movie)
             }
         }
     }
 }
 
 @Composable
-fun MovieList(
-    movies: List<Movie> = getMovies()
+fun DisplayMovieDetails(
+    movie: Movie
 ) {
-    LazyColumn {
+    Column(
+        modifier = Modifier
+            .padding(start = 12.dp, top = 10.dp, bottom = 12.dp)
+    ) {
+        Text(
+            text = """Director: ${movie.director}
+                        |Released: ${movie.year}
+                        |Genre: ${movie.genre}
+                        |Actors: ${movie.actors}
+                        |Rating: ${movie.rating}
+                    """.trimMargin()
+        )
+        Divider(
+            modifier = Modifier
+                .padding(top = 5.dp, bottom = 5.dp, end = 12.dp)
+        )
+        Text(
+            text = "Plot: ${movie.plot}"
+        )
+    }
+}
+
+@Composable
+fun MovieList(
+    movies: List<Movie>,
+    padding: PaddingValues
+) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(paddingValues = padding)
+    ) {
         items(items = movies) { movie ->
             MovieRow(movie = movie)
         }
     }
 }
 
-@Composable
-fun DisplayMovieDetails(
-    specificMovie: Movie
-) {
-    Text(
-        text = """Director: ${specificMovie.director}
-                        |Released: ${specificMovie.year}
-                        |Genre: ${specificMovie.genre}
-                        |Actors: ${specificMovie.actors}
-                        |Rating: ${specificMovie.rating}
-                    """.trimMargin(),
-        modifier = Modifier
-            .padding(start = 12.dp, top = 10.dp)
-    )
-    Divider(
-        modifier = Modifier
-            .padding(all = 5.dp)
-    )
-    Text(
-        text = "Plot: ${specificMovie.plot}",
-        modifier = Modifier
-            .padding(start = 12.dp, bottom = 12.dp)
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home() {
-    val navigationItems = getBottomNavigationItems()
+fun ShowScreen(
+    displayedMovies: List<Movie>
+) {
     var bottomItemIndex by rememberSaveable {
         mutableIntStateOf(value = 0)
     }
@@ -202,7 +209,7 @@ fun Home() {
         },
         bottomBar = {
             NavigationBar {
-                navigationItems.forEachIndexed { clickedIndex, navigationItem ->
+                getBottomNavigationItems().forEachIndexed { clickedIndex, navigationItem ->
                     NavigationBarItem(
                         selected = bottomItemIndex == clickedIndex, // a specific item is selected if its index matches the clicked index
                         onClick = {
@@ -227,12 +234,7 @@ fun Home() {
                 }
             }
         }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues = padding)
-        ) {
-            MovieList()
-        }
+    ) {
+        MovieList(movies = displayedMovies, padding = it)
     }
 }
