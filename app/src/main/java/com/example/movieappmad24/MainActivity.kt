@@ -34,10 +34,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,10 +43,10 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale.Companion.FillWidth
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.getBottomNavigationItems
-import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.ui.theme.MovieAppMAD24Theme
 import com.example.movieappmad24.ui.theme.Purple80
 
@@ -61,11 +59,17 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    ShowScreen(displayedMovies = getMovies())
+                    Navigation()
                 }
             }
         }
     }
+}
+
+private val watchlistMovies = mutableListOf<Movie>()
+
+fun getWatchlistMovies(): List<Movie> {
+    return watchlistMovies
 }
 
 @Composable
@@ -85,7 +89,7 @@ fun MovieRow(
     Card(
         shape = RoundedCornerShape(size = 20.dp),
         modifier = Modifier
-            .padding(all = 10.dp)
+            .padding(all = 5.dp)
             .fillMaxWidth()
             .animateContentSize()
     ) {
@@ -102,6 +106,10 @@ fun MovieRow(
                 IconButton(
                     onClick = {
                         // TODO: Add to favourites logic
+                        when {
+                            movie !in watchlistMovies -> watchlistMovies.add(movie)
+                            else -> watchlistMovies.remove(movie)
+                        }
                     },
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
@@ -188,12 +196,10 @@ fun MovieList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowScreen(
-    displayedMovies: List<Movie>
+    displayedMovies: List<Movie>,
+    navigationController: NavController,
+    currentRoute: String
 ) {
-    var bottomItemIndex by rememberSaveable {
-        mutableIntStateOf(value = 0)
-    }
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -209,17 +215,16 @@ fun ShowScreen(
         },
         bottomBar = {
             NavigationBar {
-                getBottomNavigationItems().forEachIndexed { clickedIndex, navigationItem ->
+                getBottomNavigationItems().forEach { navigationItem ->
                     NavigationBarItem(
-                        selected = bottomItemIndex == clickedIndex, // a specific item is selected if its index matches the clicked index
+                        selected = navigationItem.route == currentRoute,
                         onClick = {
-                            bottomItemIndex = clickedIndex
-                            // TODO: Navigation logic
+                            navigationController.navigate(route = navigationItem.route)
                         },
                         icon = {
                             Icon(
-                                imageVector = when (bottomItemIndex) {
-                                    clickedIndex -> navigationItem.selected
+                                imageVector = when (navigationItem.route) {
+                                    currentRoute -> navigationItem.selected
                                     else -> navigationItem.unselected
                                 },
                                 contentDescription = null
