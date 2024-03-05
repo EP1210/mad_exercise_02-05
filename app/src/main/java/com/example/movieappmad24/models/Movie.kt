@@ -1,5 +1,7 @@
 package com.example.movieappmad24.models
 
+import androidx.compose.runtime.mutableStateListOf
+
 data class Movie(
     val id: String,
     val title: String,
@@ -12,6 +14,8 @@ data class Movie(
     val trailer: String,
     val rating: String
 )
+
+private val watchlistMovies = mutableStateListOf<Movie>()
 
 fun getMovies(): List<Movie> {
     return listOf(
@@ -150,4 +154,20 @@ fun getMovies(): List<Movie> {
             rating = "9.5"),
 
         )
+}
+
+fun addToOrRemoveFromWatchlist(movie: Movie) {
+    if (movie !in watchlistMovies) {
+        watchlistMovies.add(movie)
+    } else {
+        watchlistMovies.remove(movie)
+    }
+}
+
+fun getWatchlistMovies(): List<Movie> {
+    return watchlistMovies
+}
+
+fun watchlistContains(movie: Movie): Boolean {
+    return movie in watchlistMovies
 }

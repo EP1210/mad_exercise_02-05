@@ -5,9 +5,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieappmad24.models.getMovies
+import com.example.movieappmad24.models.getWatchlistMovies
 
 @Composable
-fun Navigation() {
+fun StartNavigation() {
     val navigationController = rememberNavController()
 
     NavHost(

@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -46,9 +47,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
+import com.example.movieappmad24.models.addToOrRemoveFromWatchlist
 import com.example.movieappmad24.models.getBottomNavigationItems
+import com.example.movieappmad24.models.watchlistContains
 import com.example.movieappmad24.ui.theme.MovieAppMAD24Theme
 import com.example.movieappmad24.ui.theme.Purple80
+import com.example.movieappmad24.ui.theme.Red
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,17 +63,11 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation()
+                    StartNavigation()
                 }
             }
         }
     }
-}
-
-private val watchlistMovies = mutableListOf<Movie>()
-
-fun getWatchlistMovies(): List<Movie> {
-    return watchlistMovies
 }
 
 @Composable
@@ -105,18 +103,18 @@ fun MovieRow(
                 )
                 IconButton(
                     onClick = {
-                        // TODO: Add to favourites logic
-                        when {
-                            movie !in watchlistMovies -> watchlistMovies.add(movie)
-                            else -> watchlistMovies.remove(movie)
-                        }
+                        addToOrRemoveFromWatchlist(movie = movie)
                     },
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = null
+                        imageVector = when {
+                            watchlistContains(movie = movie) -> Icons.Default.Favorite
+                            else -> Icons.Default.FavoriteBorder
+                        },
+                        contentDescription = null,
+                        tint = Red
                     )
                 }
             }
