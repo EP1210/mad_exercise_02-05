@@ -24,7 +24,7 @@ fun Navigation() {
             WatchlistScreen(navigationController = navigationController, route = Screen.Watchlist.route)
         }
         composable(route = "${Screen.Detail.route}/{movieId}") {backStackEntry ->
-            DetailScreen(movieId = backStackEntry.arguments?.getString("movieId"))
+            DetailScreen(movieId = backStackEntry.arguments?.getString("movieId"), navigationController = navigationController)
         }
     }
 }
