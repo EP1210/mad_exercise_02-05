@@ -1,4 +1,4 @@
-package com.example.movieappmad24.models
+package com.example.movieappmad24.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

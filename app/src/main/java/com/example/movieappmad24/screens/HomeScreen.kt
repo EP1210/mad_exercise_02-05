@@ -43,7 +43,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.addToOrRemoveFromWatchlist
-import com.example.movieappmad24.models.getBottomNavigationItems
+import com.example.movieappmad24.navigation.getBottomNavigationItems
 import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.models.watchlistContains
 import com.example.movieappmad24.ui.theme.Purple80
