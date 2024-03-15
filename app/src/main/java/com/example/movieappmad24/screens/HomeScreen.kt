@@ -18,16 +18,11 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,8 +41,6 @@ import com.example.movieappmad24.models.addToOrRemoveFromWatchlist
 import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.models.watchlistContains
 import com.example.movieappmad24.navigation.Screen
-import com.example.movieappmad24.navigation.getBottomNavigationItems
-import com.example.movieappmad24.ui.theme.Purple80
 import com.example.movieappmad24.ui.theme.Red
 
 @Composable
@@ -183,7 +176,6 @@ fun MovieList(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowScreen(
     navigationController: NavController,
@@ -192,45 +184,10 @@ fun ShowScreen(
 ) {
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = when (currentRoute) {
-                            Screen.Watchlist.route -> "Your Watchlist"
-                            else -> "Movie App"
-                        }
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Purple80
-                )
-            )
+            SimpleTopAppBar(currentRoute = currentRoute)
         },
         bottomBar = {
-            NavigationBar {
-                getBottomNavigationItems().forEach { navigationItem ->
-                    NavigationBarItem(
-                        selected = navigationItem.route == currentRoute,
-                        onClick = {
-                            navigationController.navigate(route = navigationItem.route)
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = when (navigationItem.route) {
-                                    currentRoute -> navigationItem.selected
-                                    else -> navigationItem.unselected
-                                },
-                                contentDescription = null
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = navigationItem.label
-                            )
-                        }
-                    )
-                }
-            }
+            SimpleBottomAppBar(navigationController = navigationController, currentRoute = currentRoute)
         }
     ) {
         MovieList(movies = displayedMovies, padding = it, navigationController = navigationController)
