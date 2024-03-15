@@ -64,7 +64,9 @@ fun SimpleBottomAppBar(
             NavigationBarItem(
                 selected = navigationItem.route == currentRoute,
                 onClick = {
-                    navigationController.navigate(route = navigationItem.route)
+                    navigationController.navigate(route = navigationItem.route) {
+                        popUpTo(id = 0)
+                    }
                 },
                 icon = {
                     Icon(
