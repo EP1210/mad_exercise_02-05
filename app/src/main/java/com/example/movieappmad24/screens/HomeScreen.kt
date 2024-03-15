@@ -43,9 +43,10 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.addToOrRemoveFromWatchlist
-import com.example.movieappmad24.navigation.getBottomNavigationItems
 import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.models.watchlistContains
+import com.example.movieappmad24.navigation.Screen
+import com.example.movieappmad24.navigation.getBottomNavigationItems
 import com.example.movieappmad24.ui.theme.Purple80
 import com.example.movieappmad24.ui.theme.Red
 
@@ -176,7 +177,7 @@ fun MovieList(
     ) {
         items(items = movies) { movie ->
             MovieRow(movie = movie) { movieId ->
-                navigationController.navigate(route = "${Screen.Detail.route}/$movieId")
+                navigationController.navigate(route = Screen.Detail.passMovieId(movieId = movieId))
             }
         }
     }
@@ -194,7 +195,10 @@ fun ShowScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Movie App"
+                        text = when (currentRoute) {
+                            Screen.Watchlist.route -> "Your Watchlist"
+                            else -> "Movie App"
+                        }
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
