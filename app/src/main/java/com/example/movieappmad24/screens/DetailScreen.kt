@@ -1,8 +1,8 @@
 package com.example.movieappmad24.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,13 +53,12 @@ fun MovieImageGallery(
                 shape = RoundedCornerShape(size = 20.dp),
                 modifier = Modifier
                     .padding(all = 5.dp)
+                    .size(size = 300.dp)
             ) {
                 AsyncImage(
                     model = image,
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .aspectRatio(ratio = 1f / 1f)
+                    contentScale = ContentScale.Crop
                 )
             }
         }
