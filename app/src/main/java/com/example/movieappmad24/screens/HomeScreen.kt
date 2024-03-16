@@ -42,9 +42,14 @@ import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.models.watchlistContains
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
+import com.example.movieappmad24.widgets.SimpleBottomAppBar
+import com.example.movieappmad24.widgets.SimpleTopAppBar
 
 @Composable
-fun HomeScreen(navigationController: NavController, route: String) {
+fun HomeScreen(
+    navigationController: NavController,
+    route: String
+) {
     ShowScreen(displayedMovies = getMovies(), navigationController = navigationController, currentRoute = route)
 }
 

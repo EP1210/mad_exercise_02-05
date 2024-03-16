@@ -14,10 +14,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.getMovies
+import com.example.movieappmad24.widgets.SimpleTopAppBar
 
 @Composable
-fun DetailScreen(movieId: String?, navigationController: NavController, route: String) {
+fun DetailScreen(
+    movieId: String?,
+    navigationController: NavController,
+    route: String
+) {
     getMovies().forEach { movie ->
         if (movie.id == movieId) {
             Scaffold(
@@ -30,24 +36,31 @@ fun DetailScreen(movieId: String?, navigationController: NavController, route: S
                         .padding(paddingValues = it)
                 ) {
                     MovieRow(movie = movie)
-                    LazyRow {
-                        items(items = movie.images.drop(n = 1)) { image ->
-                            Card(
-                                shape = RoundedCornerShape(size = 20.dp),
-                                modifier = Modifier
-                                    .padding(all = 5.dp)
-                            ) {
-                                AsyncImage(
-                                    model = image,
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Crop,
-                                    modifier = Modifier
-                                        .aspectRatio(ratio = 1f / 1f)
-                                )
-                            }
-                        }
-                    }
+                    MovieImageGallery(movie = movie)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun MovieImageGallery(
+    movie: Movie
+) {
+    LazyRow {
+        items(items = movie.images.drop(n = 1)) { image ->
+            Card(
+                shape = RoundedCornerShape(size = 20.dp),
+                modifier = Modifier
+                    .padding(all = 5.dp)
+            ) {
+                AsyncImage(
+                    model = image,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .aspectRatio(ratio = 1f / 1f)
+                )
             }
         }
     }
