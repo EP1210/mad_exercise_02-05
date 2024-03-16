@@ -37,9 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
-import com.example.movieappmad24.models.addToOrRemoveFromWatchlist
 import com.example.movieappmad24.models.getMovies
-import com.example.movieappmad24.models.watchlistContains
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
 import com.example.movieappmad24.widgets.SimpleBottomAppBar
