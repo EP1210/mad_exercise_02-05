@@ -22,13 +22,12 @@ import com.example.movieappmad24.widgets.SimpleTopAppBar
 fun DetailScreen(
     movieId: String?,
     navigationController: NavController,
-    route: String
 ) {
     getMovies().forEach { movie ->
         if (movie.id == movieId) {
             Scaffold(
                 topBar = {
-                    SimpleTopAppBar(movie = movie, navigationController = navigationController, currentRoute = route)
+                    SimpleTopAppBar(topAppBarTitle = movie.title, navigationController = navigationController)
                 }
             ) {
                 Column(

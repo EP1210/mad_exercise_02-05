@@ -23,7 +23,7 @@ fun Navigation() {
             WatchlistScreen(navigationController = navigationController, route = Screen.Watchlist.route)
         }
         composable(route = Screen.Detail.route) { backStackEntry ->
-            DetailScreen(movieId = backStackEntry.arguments?.getString(MOVIE_DETAIL_KEY), navigationController = navigationController, route = Screen.Detail.route)
+            DetailScreen(movieId = backStackEntry.arguments?.getString(MOVIE_DETAIL_KEY), navigationController = navigationController)
         }
     }
 }

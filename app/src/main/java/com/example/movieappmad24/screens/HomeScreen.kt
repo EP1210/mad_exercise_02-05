@@ -48,7 +48,16 @@ fun HomeScreen(
     navigationController: NavController,
     route: String
 ) {
-    ShowScreen(displayedMovies = getMovies(), navigationController = navigationController, currentRoute = route)
+    Scaffold(
+        topBar = {
+            SimpleTopAppBar(topAppBarTitle = "Movie App")
+        },
+        bottomBar = {
+            SimpleBottomAppBar(navigationController = navigationController, currentRoute = route)
+        }
+    ) {
+        MovieList(movies = getMovies(), padding = it, navigationController = navigationController)
+    }
 }
 
 @Composable
@@ -176,23 +185,5 @@ fun MovieList(
                 navigationController.navigate(route = Screen.Detail.passMovieId(movieId = movieId))
             }
         }
-    }
-}
-
-@Composable
-fun ShowScreen(
-    navigationController: NavController,
-    currentRoute: String,
-    displayedMovies: List<Movie>
-) {
-    Scaffold(
-        topBar = {
-            SimpleTopAppBar(currentRoute = currentRoute)
-        },
-        bottomBar = {
-            SimpleBottomAppBar(navigationController = navigationController, currentRoute = currentRoute)
-        }
-    ) {
-        MovieList(movies = displayedMovies, padding = it, navigationController = navigationController)
     }
 }

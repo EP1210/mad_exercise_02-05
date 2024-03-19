@@ -10,25 +10,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.example.movieappmad24.models.Movie
-import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Purple80
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleTopAppBar(
     navigationController: NavController? = null,
-    currentRoute: String,
-    movie: Movie? = null
+    topAppBarTitle: String
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = when (currentRoute) {
-                    Screen.Watchlist.route -> "Your Watchlist"
-                    Screen.Detail.route -> movie?.title ?: ""
-                    else -> "Movie App"
-                }
+                text = topAppBarTitle
             )
         },
         navigationIcon = {
