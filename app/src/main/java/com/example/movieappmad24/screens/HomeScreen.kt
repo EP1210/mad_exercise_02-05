@@ -50,7 +50,7 @@ fun HomeScreen(
 ) {
     Scaffold(
         topBar = {
-            SimpleTopAppBar(topAppBarTitle = "Movie App")
+            SimpleTopAppBar(title = "Movie App")
         },
         bottomBar = {
             SimpleBottomAppBar(navigationController = navigationController, currentRoute = route)

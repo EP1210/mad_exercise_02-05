@@ -16,12 +16,12 @@ import com.example.movieappmad24.ui.theme.Purple80
 @Composable
 fun SimpleTopAppBar(
     navigationController: NavController? = null,
-    topAppBarTitle: String
+    title: String
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = topAppBarTitle
+                text = title
             )
         },
         navigationIcon = {
