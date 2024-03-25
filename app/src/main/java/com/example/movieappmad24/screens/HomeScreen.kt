@@ -137,7 +137,7 @@ fun DisplayMovieDetails(
 ) {
     Column(
         modifier = Modifier
-            .padding(start = 12.dp, top = 10.dp, bottom = 12.dp)
+            .padding(start = 12.dp, end = 12.dp, top = 10.dp, bottom = 12.dp)
     ) {
         Text(
             text = """Director: ${movie.director}
@@ -149,7 +149,7 @@ fun DisplayMovieDetails(
         )
         Divider(
             modifier = Modifier
-                .padding(top = 5.dp, bottom = 5.dp, end = 12.dp)
+                .padding(vertical = 5.dp)
         )
         Text(
             text = "Plot: ${movie.plot}"
