@@ -27,10 +27,7 @@ fun DetailScreen(
         if (movie.id == movieId) {
             Scaffold(
                 topBar = {
-                    SimpleTopAppBar(
-                        title = movie.title,
-                        navigationController = navigationController
-                    )
+                    SimpleTopAppBar(title = movie.title, navigationController = navigationController)
                 }
             ) {
                 Column(

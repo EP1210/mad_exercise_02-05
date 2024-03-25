@@ -18,8 +18,6 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +38,7 @@ import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
 import com.example.movieappmad24.widgets.SimpleBottomAppBar
+import com.example.movieappmad24.widgets.SimpleEventIcon
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
 @Composable
@@ -93,21 +92,16 @@ fun MovieRow(
                     modifier = Modifier
                         .aspectRatio(ratio = 18.5f / 9f)
                 )
-                IconButton(
-                    onClick = {
-                        addToOrRemoveFromWatchlist(movie = movie)
+                SimpleEventIcon(
+                    icon = when {
+                        watchlistContains(movie = movie) -> Icons.Default.Favorite
+                        else -> Icons.Default.FavoriteBorder
                     },
+                    color = Red,
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
                 ) {
-                    Icon(
-                        imageVector = when {
-                            watchlistContains(movie = movie) -> Icons.Default.Favorite
-                            else -> Icons.Default.FavoriteBorder
-                        },
-                        contentDescription = null,
-                        tint = Red
-                    )
+                    addToOrRemoveFromWatchlist(movie = movie)
                 }
             }
 
@@ -121,18 +115,13 @@ fun MovieRow(
                         .padding(start = 7.dp)
                         .weight(weight = 7f) // text takes seven parts of row
                 )
-                IconButton(
-                    onClick = {
-                        cardExpansion = !cardExpansion
-                    },
+                SimpleEventIcon(
+                    icon = Icons.Default.KeyboardArrowUp,
                     modifier = Modifier
                         .weight(weight = 1f) // icon button takes one part of row
                         .rotate(degrees = arrowRotation)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowUp,
-                        contentDescription = null
-                    )
+                    cardExpansion = !cardExpansion
                 }
             }
             if (cardExpansion) {
