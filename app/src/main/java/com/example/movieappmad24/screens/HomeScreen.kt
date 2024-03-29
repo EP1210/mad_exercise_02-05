@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.movieappmad24.MovieViewModel
 import com.example.movieappmad24.models.Movie
-import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
 import com.example.movieappmad24.widgets.SimpleBottomAppBar
@@ -44,7 +44,8 @@ import com.example.movieappmad24.widgets.SimpleTopAppBar
 @Composable
 fun HomeScreen(
     navigationController: NavController,
-    route: String
+    route: String,
+    viewModel: MovieViewModel
 ) {
     Scaffold(
         topBar = {
@@ -54,14 +55,21 @@ fun HomeScreen(
             SimpleBottomAppBar(navigationController = navigationController, currentRoute = route)
         }
     ) {
-        MovieList(movies = getMovies(), padding = it, navigationController = navigationController)
+        MovieList(
+            movies = viewModel.movies,
+            viewModel = viewModel,
+            padding = it,
+            navigationController = navigationController
+        )
     }
 }
 
 @Composable
 fun MovieRow(
     movie: Movie,
-    onItemClick: (String) -> Unit = {}
+    onItemClick: (String) -> Unit = {},
+    onFavouriteClick: () -> Unit = {},
+    viewModel: MovieViewModel
 ) {
     var cardExpansion by remember {
         mutableStateOf(value = false)
@@ -94,14 +102,14 @@ fun MovieRow(
                 )
                 SimpleEventIcon(
                     icon = when {
-                        watchlistContains(movie = movie) -> Icons.Default.Favorite
+                        viewModel.favouritesContain(movie = movie) -> Icons.Default.Favorite
                         else -> Icons.Default.FavoriteBorder
                     },
                     color = Red,
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
                 ) {
-                    addToOrRemoveFromWatchlist(movie = movie)
+                    onFavouriteClick()
                 }
             }
 
@@ -161,16 +169,25 @@ fun DisplayMovieDetails(
 fun MovieList(
     movies: List<Movie>,
     padding: PaddingValues,
-    navigationController: NavController
+    navigationController: NavController,
+    viewModel: MovieViewModel
 ) {
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues = padding)
     ) {
         items(items = movies) { movie ->
-            MovieRow(movie = movie) { movieId ->
-                navigationController.navigate(route = Screen.Detail.passMovieId(movieId = movieId))
-            }
+            MovieRow(
+                movie = movie,
+                onItemClick = { movieId ->
+                    navigationController.navigate(route = Screen.Detail.passMovieId(movieId = movieId))
+                },
+                onFavouriteClick = {
+                    viewModel.toggleIsFavouriteState(movie = movie)
+                    viewModel.addToRemoveFromFavourites(movie = movie)
+                },
+                viewModel = viewModel
+            )
         }
     }
 }

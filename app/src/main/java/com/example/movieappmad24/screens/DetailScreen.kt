@@ -14,16 +14,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.movieappmad24.MovieViewModel
 import com.example.movieappmad24.models.Movie
-import com.example.movieappmad24.models.getMovies
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
 @Composable
 fun DetailScreen(
     movieId: String?,
     navigationController: NavController,
+    viewModel: MovieViewModel
 ) {
-    getMovies().forEach { movie ->
+    viewModel.movies.forEach { movie ->
         if (movie.id == movieId) {
             Scaffold(
                 topBar = {
@@ -34,7 +35,14 @@ fun DetailScreen(
                     modifier = Modifier
                         .padding(paddingValues = it)
                 ) {
-                    MovieRow(movie = movie)
+                    MovieRow(
+                        movie = movie,
+                        viewModel = viewModel,
+                        onFavouriteClick = {
+                            viewModel.toggleIsFavouriteState(movie = movie)
+                            viewModel.addToRemoveFromFavourites(movie = movie)
+                        }
+                    )
                     MovieImageGallery(movie = movie)
                 }
             }
