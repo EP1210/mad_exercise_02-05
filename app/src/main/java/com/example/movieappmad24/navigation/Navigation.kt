@@ -20,13 +20,25 @@ fun Navigation() {
         startDestination = Screen.Home.route
     ) {
         composable(route = Screen.Home.route) {
-            HomeScreen(navigationController = navigationController, route = Screen.Home.route, viewModel = movieViewModel)
+            HomeScreen(
+                navigationController = navigationController,
+                route = Screen.Home.route,
+                viewModel = movieViewModel
+            )
         }
         composable(route = Screen.Watchlist.route) {
-            WatchlistScreen(navigationController = navigationController, route = Screen.Watchlist.route, viewModel = movieViewModel)
+            WatchlistScreen(
+                navigationController = navigationController,
+                route = Screen.Watchlist.route,
+                viewModel = movieViewModel
+            )
         }
         composable(route = Screen.Detail.route) { backStackEntry ->
-            DetailScreen(movieId = backStackEntry.arguments?.getString(MOVIE_DETAIL_KEY), navigationController = navigationController, viewModel = movieViewModel)
+            DetailScreen(
+                movieId = backStackEntry.arguments?.getString(MOVIE_DETAIL_KEY),
+                navigationController = navigationController,
+                viewModel = movieViewModel
+            )
         }
     }
 }

@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,8 +67,8 @@ fun HomeScreen(
 fun MovieRow(
     movie: Movie,
     onItemClick: (String) -> Unit = {},
-    onFavouriteClick: () -> Unit = {},
-    viewModel: MovieViewModel
+    onFavouriteClick: () -> Unit,
+    heart: ImageVector
 ) {
     var cardExpansion by remember {
         mutableStateOf(value = false)
@@ -99,7 +100,7 @@ fun MovieRow(
                         .aspectRatio(ratio = 18.5f / 9f)
                 )
                 SimpleEventIcon(
-                    icon = viewModel.dynamicHeart(movie = movie),
+                    icon = heart,
                     color = Red,
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
@@ -181,7 +182,7 @@ fun MovieList(
                     viewModel.toggleIsFavouriteState(movie = movie)
                     viewModel.addToRemoveFromFavourites(movie = movie)
                 },
-                viewModel = viewModel
+                heart = viewModel.dynamicHeart(movie = movie)
             )
         }
     }

@@ -37,11 +37,11 @@ fun DetailScreen(
                 ) {
                     MovieRow(
                         movie = movie,
-                        viewModel = viewModel,
                         onFavouriteClick = {
                             viewModel.toggleIsFavouriteState(movie = movie)
                             viewModel.addToRemoveFromFavourites(movie = movie)
-                        }
+                        },
+                        heart = viewModel.dynamicHeart(movie = movie)
                     )
                     MovieImageGallery(movie = movie)
                 }
