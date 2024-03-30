@@ -1,7 +1,11 @@
 package com.example.movieappmad24
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.getMovies
@@ -11,6 +15,7 @@ class MovieViewModel : ViewModel() {
     private val _movies = getMovies().toMutableStateList()
     val movies: List<Movie>
         get() = _movies
+
     private val _favouriteMovies = mutableStateListOf<Movie>()
     val favouriteMovies: List<Movie>
         get() = _favouriteMovies
@@ -27,7 +32,10 @@ class MovieViewModel : ViewModel() {
         }
     }
 
-    fun favouritesContain(movie: Movie): Boolean {
-        return movie in _favouriteMovies
+    fun dynamicHeart(movie: Movie): ImageVector {
+        return when (movie) {
+            in _favouriteMovies -> Icons.Default.Favorite
+            else -> Icons.Default.FavoriteBorder
+        }
     }
 }

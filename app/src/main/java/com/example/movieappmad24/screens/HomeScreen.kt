@@ -13,8 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -101,10 +99,7 @@ fun MovieRow(
                         .aspectRatio(ratio = 18.5f / 9f)
                 )
                 SimpleEventIcon(
-                    icon = when {
-                        viewModel.favouritesContain(movie = movie) -> Icons.Default.Favorite
-                        else -> Icons.Default.FavoriteBorder
-                    },
+                    icon = viewModel.dynamicHeart(movie = movie),
                     color = Red,
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
