@@ -32,7 +32,6 @@ import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.MovieViewModel
-import com.example.movieappmad24.R
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
@@ -138,9 +137,6 @@ fun MovieTrailer(movie: Movie) {
     }
 
     AndroidView(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(ratio = 16f / 9f),
         factory = {
             PlayerView(context).also { playerView ->
                 playerView.player = exoPlayer
@@ -157,6 +153,9 @@ fun MovieTrailer(movie: Movie) {
                 }
                 else -> Unit
             }
-        }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(ratio = 16f / 9f)
     )
 }
