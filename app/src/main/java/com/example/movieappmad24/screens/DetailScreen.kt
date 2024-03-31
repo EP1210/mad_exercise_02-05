@@ -32,6 +32,7 @@ import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.MovieViewModel
+import com.example.movieappmad24.R
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
@@ -112,13 +113,14 @@ fun MovieTrailer(movie: Movie) {
         mutableStateOf(value = Lifecycle.Event.ON_CREATE)
     }
     val context = LocalContext.current
-    val trailer = MediaItem.fromUri("/res/raw/${movie.trailer}")
+
+    val trailer = MediaItem.fromUri("android.resource://${context.packageName}/${movie.trailer}")
 
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(trailer)
             prepare()
-            playWhenReady = true
+            playWhenReady = false
         }
     }
 
@@ -136,6 +138,9 @@ fun MovieTrailer(movie: Movie) {
     }
 
     AndroidView(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(ratio = 16f / 9f),
         factory = {
             PlayerView(context).also { playerView ->
                 playerView.player = exoPlayer
@@ -152,9 +157,6 @@ fun MovieTrailer(movie: Movie) {
                 }
                 else -> Unit
             }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(ratio = 16f / 9f)
+        }
     )
 }
