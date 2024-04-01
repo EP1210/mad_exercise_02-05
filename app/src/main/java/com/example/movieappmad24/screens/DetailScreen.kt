@@ -1,5 +1,6 @@
 package com.example.movieappmad24.screens
 
+import android.view.View
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -145,11 +146,13 @@ fun MovieTrailer(movie: Movie) {
         update = { playerView ->
             when (lifecycle) {
                 Lifecycle.Event.ON_RESUME -> {
+                    playerView.visibility = View.VISIBLE
+                    playerView.onResume()
+                }
+                Lifecycle.Event.ON_STOP -> {
+                    playerView.visibility = View.INVISIBLE
                     playerView.onPause()
                     playerView.player?.pause()
-                }
-                Lifecycle.Event.ON_PAUSE -> {
-                    playerView.onResume()
                 }
                 else -> Unit
             }
@@ -159,3 +162,13 @@ fun MovieTrailer(movie: Movie) {
             .aspectRatio(ratio = 16f / 9f)
     )
 }
+
+/*
+Lifecycle.Event.ON_RESUME -> {
+    playerView.onPause()
+    playerView.player?.pause()
+}
+Lifecycle.Event.ON_PAUSE -> {
+    playerView.onResume()
+}
+*/
