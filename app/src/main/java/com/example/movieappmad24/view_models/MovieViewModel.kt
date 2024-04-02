@@ -1,11 +1,7 @@
-package com.example.movieappmad24
+package com.example.movieappmad24.view_models
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.models.getMovies
@@ -21,21 +17,14 @@ class MovieViewModel : ViewModel() {
         get() = _favouriteMovies
 
     fun toggleIsFavouriteState(movie: Movie) {
-        movie.isFavorite.value = !movie.isFavorite.value
+        movie.isFavourite = !movie.isFavourite
     }
 
     fun addToRemoveFromFavourites(movie: Movie) {
-        if (movie.isFavorite.value) {
+        if (movie.isFavourite) {
             _favouriteMovies.add(movie)
         } else {
             _favouriteMovies.remove(movie)
-        }
-    }
-
-    fun dynamicHeart(movie: Movie): ImageVector {
-        return when (movie) {
-            in _favouriteMovies -> Icons.Default.Favorite
-            else -> Icons.Default.FavoriteBorder
         }
     }
 }

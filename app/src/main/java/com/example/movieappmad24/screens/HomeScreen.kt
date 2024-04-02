@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -32,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.movieappmad24.MovieViewModel
+import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
@@ -182,7 +184,10 @@ fun MovieList(
                     viewModel.toggleIsFavouriteState(movie = movie)
                     viewModel.addToRemoveFromFavourites(movie = movie)
                 },
-                heart = viewModel.dynamicHeart(movie = movie)
+                heart = when (movie) {
+                    in viewModel.favouriteMovies -> Icons.Default.Favorite
+                    else -> Icons.Default.FavoriteBorder
+                }
             )
         }
     }

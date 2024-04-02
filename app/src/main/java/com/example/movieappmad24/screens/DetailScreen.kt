@@ -1,6 +1,5 @@
 package com.example.movieappmad24.screens
 
-import android.view.View
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +8,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
@@ -32,7 +34,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.movieappmad24.MovieViewModel
+import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
@@ -63,7 +65,10 @@ fun DetailScreen(
                                 viewModel.toggleIsFavouriteState(movie = movie)
                                 viewModel.addToRemoveFromFavourites(movie = movie)
                             },
-                            heart = viewModel.dynamicHeart(movie = movie)
+                            heart = when (movie) {
+                                in viewModel.favouriteMovies -> Icons.Default.Favorite
+                                else -> Icons.Default.FavoriteBorder
+                            }
                         )
                         Divider(
                             modifier = Modifier
@@ -144,16 +149,21 @@ fun MovieTrailer(movie: Movie) {
             }
         },
         update = { playerView ->
+            val position = playerView.player?.currentPosition
+
             when (lifecycle) {
                 Lifecycle.Event.ON_RESUME -> {
-                    playerView.visibility = View.VISIBLE
                     playerView.onResume()
+                    if (position != null && position > 0) {
+                        playerView.player?.playWhenReady = true
+                    }
                 }
+
                 Lifecycle.Event.ON_STOP -> {
-                    playerView.visibility = View.INVISIBLE
                     playerView.onPause()
                     playerView.player?.pause()
                 }
+
                 else -> Unit
             }
         },

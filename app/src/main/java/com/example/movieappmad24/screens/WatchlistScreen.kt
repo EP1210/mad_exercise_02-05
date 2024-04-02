@@ -3,7 +3,7 @@ package com.example.movieappmad24.screens
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.example.movieappmad24.MovieViewModel
+import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.widgets.SimpleBottomAppBar
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 

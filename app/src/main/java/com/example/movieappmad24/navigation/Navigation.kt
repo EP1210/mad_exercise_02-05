@@ -5,7 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.movieappmad24.MovieViewModel
+import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.screens.DetailScreen
 import com.example.movieappmad24.screens.HomeScreen
 import com.example.movieappmad24.screens.WatchlistScreen
