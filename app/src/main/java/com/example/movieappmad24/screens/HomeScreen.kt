@@ -28,16 +28,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
+import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.widgets.SimpleBottomAppBar
 import com.example.movieappmad24.widgets.SimpleEventIcon
 import com.example.movieappmad24.widgets.SimpleTopAppBar
@@ -70,7 +69,6 @@ fun MovieRow(
     movie: Movie,
     onItemClick: (String) -> Unit = {},
     onFavouriteClick: () -> Unit,
-    heart: ImageVector
 ) {
     var cardExpansion by remember {
         mutableStateOf(value = false)
@@ -102,7 +100,10 @@ fun MovieRow(
                         .aspectRatio(ratio = 18.5f / 9f)
                 )
                 SimpleEventIcon(
-                    icon = heart,
+                    icon = when {
+                        movie.isFavourite -> Icons.Default.Favorite
+                        else -> Icons.Default.FavoriteBorder
+                    },
                     color = Red,
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
@@ -183,10 +184,6 @@ fun MovieList(
                 onFavouriteClick = {
                     viewModel.toggleIsFavouriteState(movie = movie)
                     viewModel.addToRemoveFromFavourites(movie = movie)
-                },
-                heart = when (movie) {
-                    in viewModel.favouriteMovies -> Icons.Default.Favorite
-                    else -> Icons.Default.FavoriteBorder
                 }
             )
         }
