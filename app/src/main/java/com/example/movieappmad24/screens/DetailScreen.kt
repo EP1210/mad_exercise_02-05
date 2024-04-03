@@ -111,17 +111,13 @@ fun MovieTrailer(movie: Movie) {
         mutableStateOf(value = Lifecycle.Event.ON_CREATE)
     }
     val context = LocalContext.current
-
     val trailer = MediaItem.fromUri("android.resource://${context.packageName}/${movie.trailer}")
-
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(trailer)
             prepare()
-            playWhenReady = false
         }
     }
-
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(key1 = lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -142,18 +138,16 @@ fun MovieTrailer(movie: Movie) {
             }
         },
         update = { playerView ->
-            val position = playerView.player?.currentPosition
-
             when (lifecycle) {
                 Lifecycle.Event.ON_RESUME -> {
                     playerView.onResume()
-                    if (position != null && position > 0) {
-                        playerView.player?.play()
+                    if (exoPlayer.currentPosition != 0L) {
+                        exoPlayer.playWhenReady = true
                     }
                 }
                 Lifecycle.Event.ON_STOP -> {
                     playerView.onPause()
-                    playerView.player?.pause()
+                    exoPlayer.playWhenReady = false
                 }
                 else -> Unit
             }
