@@ -27,4 +27,10 @@ class MovieViewModel : ViewModel() {
             _favouriteMovies.remove(movie)
         }
     }
+
+    fun getMovieById(movieId: String?): Movie? {
+        return _movies.find { movie ->
+            movie.id == movieId
+        }
+    }
 }

@@ -41,42 +41,42 @@ fun DetailScreen(
     navigationController: NavController,
     viewModel: MovieViewModel
 ) {
-    viewModel.movies.forEach { movie ->
-        if (movie.id == movieId) {
-            Scaffold(
-                topBar = {
-                    SimpleTopAppBar(
-                        title = movie.title,
-                        navigationController = navigationController
-                    )
-                }
+    val movie = viewModel.getMovieById(movieId = movieId)
+
+    if (movie != null) {
+        Scaffold(
+            topBar = {
+                SimpleTopAppBar(
+                    title = movie.title,
+                    navigationController = navigationController
+                )
+            }
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(paddingValues = it)
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(paddingValues = it)
-                ) {
-                    items(count = 1) {
-                        MovieRow(
-                            movie = movie,
-                            onFavouriteClick = {
-                                viewModel.toggleIsFavouriteState(movie = movie)
-                                viewModel.addToRemoveFromFavourites(movie = movie)
-                            }
-                        )
-                        Divider(
-                            modifier = Modifier
-                                .padding(horizontal = 5.dp)
-                        )
-                        Text(
-                            text = "Movie Trailer"
-                        )
-                        MovieTrailer(movie = movie)
-                        Divider(
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                        )
-                        MovieImageGallery(movie = movie)
-                    }
+                items(count = 1) {
+                    MovieRow(
+                        movie = movie,
+                        onFavouriteClick = {
+                            viewModel.toggleIsFavouriteState(movie = movie)
+                            viewModel.addToRemoveFromFavourites(movie = movie)
+                        }
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .padding(horizontal = 5.dp)
+                    )
+                    Text(
+                        text = "Movie Trailer"
+                    )
+                    MovieTrailer(movie = movie)
+                    Divider(
+                        modifier = Modifier
+                            .padding(all = 5.dp)
+                    )
+                    MovieImageGallery(movie = movie)
                 }
             }
         }
