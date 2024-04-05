@@ -130,6 +130,9 @@ fun MovieTrailer(movie: Movie) {
             lifecycleOwner.lifecycle.removeObserver(observer = observer)
         }
     }
+    var videoPaused by remember {
+        mutableStateOf(value = true)
+    }
 
     AndroidView(
         factory = {
@@ -141,13 +144,14 @@ fun MovieTrailer(movie: Movie) {
             when (lifecycle) {
                 Lifecycle.Event.ON_RESUME -> {
                     playerView.onResume()
-                    if (exoPlayer.currentPosition != 0L) {
-                        exoPlayer.playWhenReady = true
+                    if (!videoPaused) {
+                        exoPlayer.play()
                     }
                 }
                 Lifecycle.Event.ON_STOP -> {
                     playerView.onPause()
-                    exoPlayer.playWhenReady = false
+                    videoPaused = !exoPlayer.isPlaying
+                    exoPlayer.pause()
                 }
                 else -> Unit
             }
