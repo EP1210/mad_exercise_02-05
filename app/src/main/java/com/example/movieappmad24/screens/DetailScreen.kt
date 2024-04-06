@@ -31,7 +31,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
@@ -71,12 +70,12 @@ fun DetailScreen(
                     Text(
                         text = "Movie Trailer"
                     )
-                    MovieTrailer(movie = movie)
+                    MovieTrailer(movieTrailer = movie.trailer)
                     Divider(
                         modifier = Modifier
                             .padding(all = 5.dp)
                     )
-                    MovieImageGallery(movie = movie)
+                    MovieImageGallery(movieImages = movie.images)
                 }
             }
         }
@@ -85,10 +84,10 @@ fun DetailScreen(
 
 @Composable
 fun MovieImageGallery(
-    movie: Movie
+    movieImages: List<String>
 ) {
     LazyRow {
-        items(items = movie.images.drop(n = 1)) { image ->
+        items(items = movieImages.drop(n = 1)) { image ->
             Card(
                 shape = RoundedCornerShape(size = 20.dp),
                 modifier = Modifier
@@ -106,12 +105,14 @@ fun MovieImageGallery(
 }
 
 @Composable
-fun MovieTrailer(movie: Movie) {
+fun MovieTrailer(
+    movieTrailer: String
+) {
     var lifecycle by remember {
         mutableStateOf(value = Lifecycle.Event.ON_CREATE)
     }
     val context = LocalContext.current
-    val trailer = MediaItem.fromUri("android.resource://${context.packageName}/${movie.trailer}")
+    val trailer = MediaItem.fromUri("android.resource://${context.packageName}/$movieTrailer")
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(trailer)
