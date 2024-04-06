@@ -28,9 +28,14 @@ class MovieViewModel : ViewModel() {
         }
     }
 
-    fun getMovieById(movieId: String?): Movie? {
-        return _movies.find { movie ->
-            movie.id == movieId
+    fun getMovieById(movieId: String?): Movie {
+        var movieIndex = 0
+
+        for (index in 0 until _movies.size) {
+            if (_movies[index].id == movieId) {
+                movieIndex = index
+            }
         }
+        return _movies[movieIndex]
     }
 }
