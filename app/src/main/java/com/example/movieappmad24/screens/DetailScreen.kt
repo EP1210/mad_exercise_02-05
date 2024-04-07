@@ -31,17 +31,16 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
 @Composable
 fun DetailScreen(
-    movieId: String?,
+    movie: Movie,
     navigationController: NavController,
     viewModel: MovieViewModel
 ) {
-    val movie = viewModel.getMovieById(movieId = movieId)
-
     Scaffold(
         topBar = {
             SimpleTopAppBar(

@@ -35,7 +35,7 @@ fun Navigation() {
         }
         composable(route = Screen.Detail.route) { backStackEntry ->
             DetailScreen(
-                movieId = backStackEntry.arguments?.getString(MOVIE_DETAIL_KEY),
+                movie = movieViewModel.getMovieById(movieId = backStackEntry.arguments?.getString(MOVIE_DETAIL_KEY)),
                 navigationController = navigationController,
                 viewModel = movieViewModel
             )
