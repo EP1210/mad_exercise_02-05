@@ -1,13 +1,15 @@
 package com.example.movieappmad24.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
@@ -49,32 +51,31 @@ fun DetailScreen(
             )
         }
     ) {
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(paddingValues = it)
+                .verticalScroll(state = rememberScrollState())
         ) {
-            items(count = 1) {
-                MovieRow(
-                    movie = movie,
-                    onFavouriteClick = {
-                        viewModel.toggleIsFavouriteState(movie = movie)
-                        viewModel.addToRemoveFromFavourites(movie = movie)
-                    }
-                )
-                Divider(
-                    modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                )
-                Text(
-                    text = "Movie Trailer"
-                )
-                MovieTrailer(movieTrailer = movie.trailer)
-                Divider(
-                    modifier = Modifier
-                        .padding(all = 5.dp)
-                )
-                MovieImageGallery(movieImages = movie.images)
-            }
+            MovieRow(
+                movie = movie,
+                onFavouriteClick = {
+                    viewModel.toggleIsFavouriteState(movie = movie)
+                    viewModel.addToRemoveFromFavourites(movie = movie)
+                }
+            )
+            Divider(
+                modifier = Modifier
+                    .padding(horizontal = 5.dp)
+            )
+            Text(
+                text = "Movie Trailer"
+            )
+            MovieTrailer(movieTrailer = movie.trailer)
+            Divider(
+                modifier = Modifier
+                    .padding(all = 5.dp)
+            )
+            MovieImageGallery(movieImages = movie.images)
         }
     }
 }
