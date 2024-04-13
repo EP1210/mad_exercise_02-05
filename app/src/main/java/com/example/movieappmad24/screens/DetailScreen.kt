@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
@@ -35,6 +37,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.movieappmad24.models.Movie
 import com.example.movieappmad24.view_models.MovieViewModel
+import com.example.movieappmad24.widgets.SimpleEventIcon
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
 @Composable
@@ -46,9 +49,14 @@ fun DetailScreen(
     Scaffold(
         topBar = {
             SimpleTopAppBar(
-                title = movie.title,
-                navigationController = navigationController
-            )
+                title = movie.title
+            ) {
+                SimpleEventIcon(
+                    icon = Icons.Default.ArrowBack
+                ) {
+                    navigationController.popBackStack()
+                }
+            }
         }
     ) {
         Column(
@@ -147,11 +155,13 @@ fun MovieTrailer(
                         exoPlayer.play()
                     }
                 }
+
                 Lifecycle.Event.ON_STOP -> {
                     playerView.onPause()
                     videoPaused = !exoPlayer.isPlaying
                     exoPlayer.pause()
                 }
+
                 else -> Unit
             }
         },
