@@ -1,19 +1,16 @@
 package com.example.movieappmad24.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieappmad24.screens.DetailScreen
 import com.example.movieappmad24.screens.HomeScreen
 import com.example.movieappmad24.screens.WatchlistScreen
-import com.example.movieappmad24.view_models.MovieViewModel
 
 @Composable
 fun Navigation() {
     val navigationController = rememberNavController()
-    val movieViewModel: MovieViewModel = viewModel()
 
     NavHost(
         navController = navigationController,
@@ -22,22 +19,19 @@ fun Navigation() {
         composable(route = Screen.Home.route) {
             HomeScreen(
                 navigationController = navigationController,
-                route = Screen.Home.route,
-                viewModel = movieViewModel
+                route = Screen.Home.route
             )
         }
         composable(route = Screen.Watchlist.route) {
             WatchlistScreen(
                 navigationController = navigationController,
-                route = Screen.Watchlist.route,
-                viewModel = movieViewModel
+                route = Screen.Watchlist.route
             )
         }
         composable(route = Screen.Detail.route) { backStackEntry ->
             DetailScreen(
-                movie = movieViewModel.getMovieById(movieId = backStackEntry.arguments?.getString(MOVIE_DETAIL_KEY)),
                 navigationController = navigationController,
-                viewModel = movieViewModel
+                movieId = backStackEntry.arguments?.getLong(MOVIE_DETAIL_KEY)
             )
         }
     }

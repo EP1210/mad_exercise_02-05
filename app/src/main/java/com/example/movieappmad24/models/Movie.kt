@@ -1,10 +1,11 @@
 package com.example.movieappmad24.models
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class Movie(
+    @PrimaryKey(autoGenerate = true) val movieId: Long = 0,
     val id: String,
     val title: String,
     val year: String,
@@ -12,14 +13,13 @@ data class Movie(
     val director: String,
     val actors: String,
     val plot: String,
-    val images: List<String>,
+    //@Ignore val images: List<String>, todo: solve problem
     val trailer: String,
     val rating: String,
-    val initialIsFavourite: Boolean = false
-) {
-    var isFavourite by mutableStateOf(value = initialIsFavourite)
-}
+    var isFavourite: Boolean = false
+)
 
+/*
 fun getMovies(): List<Movie> {
     return listOf(
         Movie(id = "tt0499549",
@@ -158,3 +158,5 @@ fun getMovies(): List<Movie> {
 
         )
 }
+
+ */

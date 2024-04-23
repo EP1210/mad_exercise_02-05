@@ -11,9 +11,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,67 +30,72 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.movieappmad24.models.Movie
-import com.example.movieappmad24.view_models.MovieViewModel
+import com.example.movieappmad24.dependency_injection.InjectorUtils
+import com.example.movieappmad24.models.MovieImage
+import com.example.movieappmad24.view_models.DetailViewModel
 import com.example.movieappmad24.widgets.SimpleEventIcon
 import com.example.movieappmad24.widgets.SimpleTopAppBar
 
 @Composable
 fun DetailScreen(
-    movie: Movie,
-    navigationController: NavController,
-    viewModel: MovieViewModel
+    movieId: Long?,
+    navigationController: NavController
 ) {
-    Scaffold(
-        topBar = {
-            SimpleTopAppBar(
-                title = movie.title
-            ) {
-                SimpleEventIcon(
-                    icon = Icons.Default.ArrowBack
+    val viewModel: DetailViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(context = LocalContext.current))
+    val instance = viewModel.searchMovieById(movieId = movieId)
+
+    if (instance != null) {
+        Scaffold(
+            topBar = {
+                SimpleTopAppBar(
+                    title = instance.movie.title
                 ) {
-                    navigationController.popBackStack()
+                    SimpleEventIcon(
+                        icon = Icons.AutoMirrored.Filled.ArrowBack
+                    ) {
+                        navigationController.popBackStack()
+                    }
                 }
             }
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(paddingValues = it)
-                .verticalScroll(state = rememberScrollState())
         ) {
-            MovieRow(
-                movie = movie,
-                onFavouriteClick = {
-                    viewModel.toggleIsFavouriteState(movie = movie)
-                    viewModel.addToRemoveFromFavourites(movie = movie)
-                }
-            )
-            Divider(
+            Column(
                 modifier = Modifier
-                    .padding(horizontal = 5.dp)
-            )
-            Text(
-                text = "Movie Trailer"
-            )
-            MovieTrailer(movieTrailer = movie.trailer)
-            Divider(
-                modifier = Modifier
-                    .padding(all = 5.dp)
-            )
-            MovieImageGallery(movieImages = movie.images)
+                    .padding(paddingValues = it)
+                    .verticalScroll(state = rememberScrollState())
+            ) {
+                MovieRow(
+                    instance = instance,
+                    onFavouriteClick = {
+                        viewModel.toggleIsFavouriteState(instance = instance)
+                    }
+                )
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                )
+                Text(
+                    text = "Movie Trailer"
+                )
+                MovieTrailer(movieTrailer = instance.movie.trailer)
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(all = 5.dp)
+                )
+                MovieImageGallery(movieImages = instance.movieImages)
+            }
         }
     }
 }
 
 @Composable
 fun MovieImageGallery(
-    movieImages: List<String>
+    movieImages: List<MovieImage>
 ) {
     LazyRow {
         items(items = movieImages.drop(n = 1)) { image ->
@@ -101,7 +106,7 @@ fun MovieImageGallery(
                     .size(size = 300.dp)
             ) {
                 AsyncImage(
-                    model = image,
+                    model = image.url,
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
