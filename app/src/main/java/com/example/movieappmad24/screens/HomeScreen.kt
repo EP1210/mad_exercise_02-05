@@ -189,9 +189,15 @@ fun MovieList(
                     navigationController.navigate(route = Screen.Detail.passMovieId(movieId = movieId))
                 },
                 onFavouriteClick = {
-                    when (viewModel) { // todo: add or remove from favourites
-                        is HomeViewModel -> viewModel.toggleIsFavouriteState(instance = movie)
-                        is WatchlistViewModel -> viewModel.toggleIsFavouriteState(instance = movie)
+                    when (viewModel) {
+                        is HomeViewModel -> {
+                            viewModel.toggleIsFavouriteState(instance = movie)
+                            viewModel.addToRemoveFromFavourites(instance = movie)
+                        }
+                        is WatchlistViewModel -> {
+                            viewModel.toggleIsFavouriteState(instance = movie)
+                            viewModel.addToRemoveFromFavourites(instance = movie)
+                        }
                     }
                 }
             )

@@ -22,6 +22,8 @@ open class HomeViewModel(private val movieRepository: MovieRepository) : ViewMod
         }
     }
 
+    fun addToRemoveFromFavourites(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).addToRemoveFromFavourites(instance = instance)
+
     init {
         viewModelScope.launch {
             movieRepository.getAllMovies().distinctUntilChanged().collect { movies ->

@@ -15,6 +15,14 @@ class WatchlistViewModel(private val movieRepository: MovieRepository) : ViewMod
     private val _favouriteMovies = MutableStateFlow(listOf<MovieWithImages>())
     val favouriteMovies: StateFlow<List<MovieWithImages>> = _favouriteMovies.asStateFlow()
 
+    fun addToRemoveFromFavourites(instance: MovieWithImages) {
+        if (instance.movie.isFavourite) {
+            _favouriteMovies.value += instance
+        } else {
+            _favouriteMovies.value -= instance
+        }
+    }
+
     fun toggleIsFavouriteState(instance: MovieWithImages) = HomeViewModel(movieRepository = movieRepository).toggleIsFavouriteState(instance = instance)
 
     init {

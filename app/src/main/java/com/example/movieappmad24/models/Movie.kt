@@ -1,6 +1,7 @@
 package com.example.movieappmad24.models
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
@@ -13,13 +14,12 @@ data class Movie(
     val director: String,
     val actors: String,
     val plot: String,
-    //@Ignore val images: List<String>, todo: solve problem
+    @Ignore val images: List<String>, // todo: solve problem
     val trailer: String,
     val rating: String,
     var isFavourite: Boolean = false
 )
 
-/*
 fun getMovies(): List<Movie> {
     return listOf(
         Movie(id = "tt0499549",
@@ -158,5 +158,3 @@ fun getMovies(): List<Movie> {
 
         )
 }
-
- */

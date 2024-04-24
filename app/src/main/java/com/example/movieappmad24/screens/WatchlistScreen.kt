@@ -18,7 +18,7 @@ fun WatchlistScreen(
 ) {
     val watchlistViewModel: WatchlistViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(context = LocalContext.current))
 
-    Scaffold(
+Scaffold(
         topBar = {
             SimpleTopAppBar(title = "Your Watchlist")
         },

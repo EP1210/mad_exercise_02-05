@@ -11,4 +11,6 @@ class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(
     }
 
     fun toggleIsFavouriteState(instance: MovieWithImages) = HomeViewModel(movieRepository = movieRepository).toggleIsFavouriteState(instance = instance)
+
+    fun addToRemoveFromFavourites(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).addToRemoveFromFavourites(instance = instance)
 }

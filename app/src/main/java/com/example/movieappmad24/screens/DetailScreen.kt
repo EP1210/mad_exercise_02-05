@@ -47,8 +47,8 @@ fun DetailScreen(
     movieId: Long?,
     navigationController: NavController
 ) {
-    val viewModel: DetailViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(context = LocalContext.current))
-    val instance = viewModel.searchMovieById(movieId = movieId)
+    val detailViewModel: DetailViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(context = LocalContext.current))
+    val instance = detailViewModel.searchMovieById(movieId = movieId)
 
     if (instance != null) {
         Scaffold(
@@ -72,7 +72,8 @@ fun DetailScreen(
                 MovieRow(
                     instance = instance,
                     onFavouriteClick = {
-                        viewModel.toggleIsFavouriteState(instance = instance)
+                        detailViewModel.toggleIsFavouriteState(instance = instance)
+                        detailViewModel.addToRemoveFromFavourites(instance = instance)
                     }
                 )
                 HorizontalDivider(
