@@ -15,14 +15,9 @@ open class HomeViewModel(private val movieRepository: MovieRepository) : ViewMod
     private val _allMovies = MutableStateFlow(listOf<MovieWithImages>())
     val allMovies: StateFlow<List<MovieWithImages>> = _allMovies.asStateFlow()
 
-    fun toggleIsFavouriteState(instance: MovieWithImages) {
-        viewModelScope.launch {
-            instance.movie.isFavourite = !instance.movie.isFavourite
-            movieRepository.updateMovie(movie = instance.movie)
-        }
-    }
-
     fun addToRemoveFromFavourites(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).addToRemoveFromFavourites(instance = instance)
+
+    fun updateFavouriteState(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).updateFavouriteState(instance = instance)
 
     init {
         viewModelScope.launch {

@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.movieappmad24.models.Movie
+import com.example.movieappmad24.models.MovieImage
 import com.example.movieappmad24.models.MovieWithImages
 import kotlinx.coroutines.flow.Flow
 
@@ -14,17 +15,19 @@ import kotlinx.coroutines.flow.Flow
 interface MovieDataAccessObject {
     
     @Insert
-    fun insert(movie: Movie)
+    suspend fun insert(movie: Movie)
+
+    @Insert
+    suspend fun insertMovies(movies: List<Movie>)
+
+    @Insert
+    suspend fun insertMovieImages(movieImages: List<MovieImage>)
 
     @Update
-    fun update(movie: Movie)
+    suspend fun update(movie: Movie)
 
     @Delete
-    fun delete(movie: Movie)
-
-    @Transaction
-    @Query("select * from Movie where movieId = :movieId")
-    fun queryMovieById(movieId: Long?): MovieWithImages?
+    suspend fun delete(movie: Movie)
 
     @Transaction
     @Query("select * from Movie")
@@ -33,4 +36,11 @@ interface MovieDataAccessObject {
     @Transaction
     @Query("select * from Movie where isFavourite = 1") // in SQLite 0 is false and 1 is true
     fun queryFavouriteMovies(): Flow<List<MovieWithImages>>
+
+    @Transaction
+    @Query("select * from Movie where movieId = :movieId")
+    suspend fun queryMovieById(movieId: Long?): MovieWithImages?
+
+    @Query("select movieId from Movie")
+    suspend fun queryMovieIds(): List<Long>
 }

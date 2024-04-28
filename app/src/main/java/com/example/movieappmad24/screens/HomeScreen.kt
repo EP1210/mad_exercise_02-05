@@ -33,7 +33,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
@@ -42,7 +41,6 @@ import com.example.movieappmad24.models.MovieWithImages
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
 import com.example.movieappmad24.view_models.HomeViewModel
-import com.example.movieappmad24.view_models.WatchlistViewModel
 import com.example.movieappmad24.widgets.SimpleBottomAppBar
 import com.example.movieappmad24.widgets.SimpleEventIcon
 import com.example.movieappmad24.widgets.SimpleTopAppBar
@@ -64,10 +62,12 @@ fun HomeScreen(
     ) {
         MovieList(
             movies = homeViewModel.allMovies.collectAsState().value,
-            viewModel = homeViewModel,
             padding = it,
             navigationController = navigationController
-        )
+        ) { instance ->
+            homeViewModel.updateFavouriteState(instance = instance)
+            homeViewModel.addToRemoveFromFavourites(instance = instance)
+        }
     }
 }
 
@@ -75,7 +75,7 @@ fun HomeScreen(
 fun MovieRow(
     instance: MovieWithImages,
     onItemClick: (Long) -> Unit = {},
-    onFavouriteClick: () -> Unit
+    onFavouriteClick: (MovieWithImages) -> Unit
 ) {
     var cardExpansion by remember {
         mutableStateOf(value = false)
@@ -96,11 +96,11 @@ fun MovieRow(
                 onItemClick(instance.movie.movieId)
             }
     ) {
-
         Column {
+
             Box {
                 AsyncImage(
-                    model = instance.movieImages[0],
+                    model = instance.movieImages[0].url,
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier
@@ -115,7 +115,7 @@ fun MovieRow(
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
                 ) {
-                    onFavouriteClick()
+                    onFavouriteClick(instance) // todo: problem with recomposition of UI
                 }
             }
 
@@ -176,29 +176,20 @@ fun MovieList(
     movies: List<MovieWithImages>,
     padding: PaddingValues,
     navigationController: NavController,
-    viewModel: ViewModel
+    viewModelAction: (MovieWithImages) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues = padding)
     ) {
-        items(items = movies) { movie ->
+        items(items = movies) { instance ->
             MovieRow(
-                instance = movie,
+                instance = instance,
                 onItemClick = { movieId ->
                     navigationController.navigate(route = Screen.Detail.passMovieId(movieId = movieId))
                 },
-                onFavouriteClick = {
-                    when (viewModel) {
-                        is HomeViewModel -> {
-                            viewModel.toggleIsFavouriteState(instance = movie)
-                            viewModel.addToRemoveFromFavourites(instance = movie)
-                        }
-                        is WatchlistViewModel -> {
-                            viewModel.toggleIsFavouriteState(instance = movie)
-                            viewModel.addToRemoveFromFavourites(instance = movie)
-                        }
-                    }
+                onFavouriteClick = { movieWithImages ->
+                    viewModelAction(movieWithImages)
                 }
             )
         }

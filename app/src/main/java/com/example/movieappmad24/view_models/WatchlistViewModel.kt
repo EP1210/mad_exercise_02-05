@@ -23,7 +23,12 @@ class WatchlistViewModel(private val movieRepository: MovieRepository) : ViewMod
         }
     }
 
-    fun toggleIsFavouriteState(instance: MovieWithImages) = HomeViewModel(movieRepository = movieRepository).toggleIsFavouriteState(instance = instance)
+    fun updateFavouriteState(instance: MovieWithImages) {
+        instance.movie.isFavourite = !instance.movie.isFavourite
+        viewModelScope.launch {
+            movieRepository.updateMovie(movie = instance.movie)
+        }
+    }
 
     init {
         viewModelScope.launch {

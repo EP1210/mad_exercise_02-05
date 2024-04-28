@@ -1,12 +1,17 @@
 package com.example.movieappmad24.data
 
 import com.example.movieappmad24.models.Movie
+import com.example.movieappmad24.models.MovieImage
 import com.example.movieappmad24.models.MovieWithImages
 import kotlinx.coroutines.flow.Flow
 
 class MovieRepository(private val movieDataAccessObject: MovieDataAccessObject) {
 
     suspend fun insertMovie(movie: Movie) = movieDataAccessObject.insert(movie = movie)
+
+    suspend fun insertAllMovies(movies: List<Movie>) = movieDataAccessObject.insertMovies(movies = movies)
+
+    suspend fun insertAllMovieImages(movieImages: List<MovieImage>) = movieDataAccessObject.insertMovieImages(movieImages = movieImages)
 
     suspend fun updateMovie(movie: Movie) = movieDataAccessObject.update(movie = movie)
 
@@ -16,7 +21,9 @@ class MovieRepository(private val movieDataAccessObject: MovieDataAccessObject) 
 
     fun getFavouriteMovies(): Flow<List<MovieWithImages>> = movieDataAccessObject.queryFavouriteMovies()
 
-    fun getMovieById(movieId: Long?): MovieWithImages? = movieDataAccessObject.queryMovieById(movieId = movieId)
+    suspend fun getMovieById(movieId: Long?): MovieWithImages? = movieDataAccessObject.queryMovieById(movieId = movieId)
+
+    suspend fun getMovieIds(): List<Long> = movieDataAccessObject.queryMovieIds()
 
     companion object {
         @Volatile

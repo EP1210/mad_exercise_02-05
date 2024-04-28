@@ -72,7 +72,7 @@ fun DetailScreen(
                 MovieRow(
                     instance = instance,
                     onFavouriteClick = {
-                        detailViewModel.toggleIsFavouriteState(instance = instance)
+                        detailViewModel.updateFavouriteState(instance = instance)
                         detailViewModel.addToRemoveFromFavourites(instance = instance)
                     }
                 )
