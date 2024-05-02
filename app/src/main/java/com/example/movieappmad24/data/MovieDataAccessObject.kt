@@ -39,7 +39,7 @@ interface MovieDataAccessObject {
 
     @Transaction
     @Query("select * from Movie where movieId = :movieId")
-    suspend fun queryMovieById(movieId: Long?): MovieWithImages?
+    fun queryMovieById(movieId: Long?): Flow<MovieWithImages?>
 
     @Query("select movieId from Movie")
     suspend fun queryMovieIds(): List<Long>

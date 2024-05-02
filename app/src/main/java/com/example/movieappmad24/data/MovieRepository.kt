@@ -21,7 +21,7 @@ class MovieRepository(private val movieDataAccessObject: MovieDataAccessObject) 
 
     fun getFavouriteMovies(): Flow<List<MovieWithImages>> = movieDataAccessObject.queryFavouriteMovies()
 
-    suspend fun getMovieById(movieId: Long?): MovieWithImages? = movieDataAccessObject.queryMovieById(movieId = movieId)
+    fun getMovieById(movieId: Long?): Flow<MovieWithImages?> = movieDataAccessObject.queryMovieById(movieId = movieId)
 
     suspend fun getMovieIds(): List<Long> = movieDataAccessObject.queryMovieIds()
 

@@ -27,12 +27,10 @@ Scaffold(
         }
     ) {
         MovieList(
-            movies = watchlistViewModel.favouriteMovies.collectAsState().value,
+            moviesWithImages = watchlistViewModel.favouriteMovies.collectAsState().value,
             padding = it,
-            navigationController = navigationController
-        ) { instance ->
-            watchlistViewModel.updateFavouriteState(instance = instance)
-            watchlistViewModel.addToRemoveFromFavourites(instance = instance)
-        }
+            navigationController = navigationController,
+            viewModel = watchlistViewModel
+        )
     }
 }

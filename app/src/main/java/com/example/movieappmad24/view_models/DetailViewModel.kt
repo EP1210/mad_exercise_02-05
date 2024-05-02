@@ -4,20 +4,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieappmad24.data.MovieRepository
 import com.example.movieappmad24.models.MovieWithImages
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(), MovieViewModel {
 
-    fun searchMovieById(movieId: Long?): MovieWithImages? {
-        var movie: MovieWithImages? = null
+    private val _specificMovie: MutableStateFlow<MovieWithImages?>? = null
 
+    fun searchMovieById(movieId: Long?): StateFlow<MovieWithImages?>? {
         viewModelScope.launch {
-            movie = movieRepository.getMovieById(movieId = movieId)
+            movieRepository.getMovieById(movieId = movieId).collect { movie ->
+                _specificMovie?.value = movie
+            }
         }
-        return movie
+        return _specificMovie?.asStateFlow()
     }
 
-    fun addToRemoveFromFavourites(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).addToRemoveFromFavourites(instance = instance)
-
-    fun updateFavouriteState(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).updateFavouriteState(instance = instance)
+    override fun updateFavouriteState(instance: MovieWithImages) {
+        instance.movie.isFavourite = !instance.movie.isFavourite
+        viewModelScope.launch {
+            movieRepository.updateMovie(movie = instance.movie)
+        }
+    }
 }

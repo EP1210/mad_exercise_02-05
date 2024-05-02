@@ -41,6 +41,7 @@ import com.example.movieappmad24.models.MovieWithImages
 import com.example.movieappmad24.navigation.Screen
 import com.example.movieappmad24.ui.theme.Red
 import com.example.movieappmad24.view_models.HomeViewModel
+import com.example.movieappmad24.view_models.MovieViewModel
 import com.example.movieappmad24.widgets.SimpleBottomAppBar
 import com.example.movieappmad24.widgets.SimpleEventIcon
 import com.example.movieappmad24.widgets.SimpleTopAppBar
@@ -61,13 +62,11 @@ fun HomeScreen(
         }
     ) {
         MovieList(
-            movies = homeViewModel.allMovies.collectAsState().value,
+            moviesWithImages = homeViewModel.allMovies.collectAsState().value,
             padding = it,
-            navigationController = navigationController
-        ) { instance ->
-            homeViewModel.updateFavouriteState(instance = instance)
-            homeViewModel.addToRemoveFromFavourites(instance = instance)
-        }
+            navigationController = navigationController,
+            viewModel = homeViewModel
+        )
     }
 }
 
@@ -75,7 +74,7 @@ fun HomeScreen(
 fun MovieRow(
     instance: MovieWithImages,
     onItemClick: (Long) -> Unit = {},
-    onFavouriteClick: (MovieWithImages) -> Unit
+    onFavouriteClick: () -> Unit
 ) {
     var cardExpansion by remember {
         mutableStateOf(value = false)
@@ -115,7 +114,7 @@ fun MovieRow(
                     modifier = Modifier
                         .align(alignment = Alignment.TopEnd)
                 ) {
-                    onFavouriteClick(instance) // todo: problem with recomposition of UI
+                    onFavouriteClick()
                 }
             }
 
@@ -173,23 +172,23 @@ fun DisplayMovieDetails(
 
 @Composable
 fun MovieList(
-    movies: List<MovieWithImages>,
+    moviesWithImages: List<MovieWithImages>,
     padding: PaddingValues,
     navigationController: NavController,
-    viewModelAction: (MovieWithImages) -> Unit
+    viewModel: MovieViewModel
 ) {
     LazyColumn(
         modifier = Modifier
             .padding(paddingValues = padding)
     ) {
-        items(items = movies) { instance ->
+        items(items = moviesWithImages) { movieWithImages ->
             MovieRow(
-                instance = instance,
+                instance = movieWithImages,
                 onItemClick = { movieId ->
                     navigationController.navigate(route = Screen.Detail.passMovieId(movieId = movieId))
                 },
-                onFavouriteClick = { movieWithImages ->
-                    viewModelAction(movieWithImages)
+                onFavouriteClick = {
+                    viewModel.updateFavouriteState(instance = movieWithImages)
                 }
             )
         }

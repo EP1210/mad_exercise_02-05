@@ -5,7 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
-data class Movie(
+class Movie(
     @PrimaryKey(autoGenerate = true) val movieId: Long = 0,
     val id: String,
     val title: String,

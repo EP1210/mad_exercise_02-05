@@ -10,14 +10,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-open class HomeViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+class HomeViewModel(private val movieRepository: MovieRepository) : ViewModel(), MovieViewModel {
 
     private val _allMovies = MutableStateFlow(listOf<MovieWithImages>())
     val allMovies: StateFlow<List<MovieWithImages>> = _allMovies.asStateFlow()
 
-    fun addToRemoveFromFavourites(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).addToRemoveFromFavourites(instance = instance)
-
-    fun updateFavouriteState(instance: MovieWithImages) = WatchlistViewModel(movieRepository = movieRepository).updateFavouriteState(instance = instance)
+    override fun updateFavouriteState(instance: MovieWithImages) {
+        instance.movie.isFavourite = !instance.movie.isFavourite
+        viewModelScope.launch {
+            movieRepository.updateMovie(movie = instance.movie)
+        }
+    }
 
     init {
         viewModelScope.launch {
