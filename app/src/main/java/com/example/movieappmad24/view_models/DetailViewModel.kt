@@ -11,15 +11,15 @@ import kotlinx.coroutines.launch
 
 class DetailViewModel(private val movieRepository: MovieRepository) : ViewModel(), MovieViewModel {
 
-    private val _specificMovie: MutableStateFlow<MovieWithImages?>? = null
+    private val _specificMovie = MutableStateFlow<MovieWithImages?>(value = null)
 
-    fun searchMovieById(movieId: Long?): StateFlow<MovieWithImages?>? {
+    fun searchMovieById(movieId: Long?): StateFlow<MovieWithImages?> {
         viewModelScope.launch {
             movieRepository.getMovieById(movieId = movieId).collect { movie ->
-                _specificMovie?.value = movie
+                _specificMovie.value = movie
             }
         }
-        return _specificMovie?.asStateFlow()
+        return _specificMovie.asStateFlow()
     }
 
     override fun updateFavouriteState(instance: MovieWithImages) {

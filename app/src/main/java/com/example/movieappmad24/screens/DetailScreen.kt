@@ -49,7 +49,7 @@ fun DetailScreen(
     navigationController: NavController
 ) {
     val detailViewModel: DetailViewModel = viewModel(factory = InjectorUtils.provideMovieViewModelFactory(context = LocalContext.current))
-    val instance = detailViewModel.searchMovieById(movieId = movieId)?.collectAsState()?.value
+    val instance = detailViewModel.searchMovieById(movieId = movieId).collectAsState().value
 
     if (instance != null) {
         Scaffold(
